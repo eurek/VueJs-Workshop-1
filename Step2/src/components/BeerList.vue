@@ -9,7 +9,8 @@
         v-for="beer in beers"
         :key="beer.id"
         :disabled="value && value.id === beer.id"
-        class="list-group-item list-group-item-action">
+        class="list-group-item list-group-item-action"
+        v-on:click="$emit('select-beer', beer)">
 
         <h5>{{ beer.name }}</h5>
         <h6 class="text-muted">{{ beer.tagline }}</h6>

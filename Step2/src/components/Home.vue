@@ -3,10 +3,13 @@
     <div class="row card-group">
 
       <!-- BEER LIST -->
-      <BeerList :beers="beers"></BeerList>
+      <BeerList
+        v-on:select-beer="selectedBeer = $event"
+        :beers="beers">
+      </BeerList>
 
       <!-- SELECTED BEER DETAILS -->
-      <BeerDetails></BeerDetails>
+      <BeerDetails :beer="selectedBeer"></BeerDetails>
     </div>
   </div>
 </template>
@@ -19,7 +22,8 @@ export default {
   name: 'home',
   data () {
     return {
-      beers: []
+      beers: [],
+      selectedBeer: {}
     }
   },
   mounted () {
