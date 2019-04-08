@@ -4,9 +4,10 @@
       <!-- LOADING BEERS -->
       <p v-if="beersLoading">Loading beers...</p>
 
+       <input v-model="searchTerms">
       <!-- BEER LIST -->
       <button
-        v-for="beer in filteredBeers"
+        v-for="beer in filteredBeersWithPagination"
         :key="beer.id"
         @click="$emit('input', beer)"
         :disabled="value && value.id === beer.id"
@@ -16,13 +17,29 @@
         <h6 class="text-muted">{{ beer.tagline }}</h6>
       </button>
     </div>
+
+    <Pagination @change-page="changePage" :nbr-result="numberOfResult"></Pagination>
+
   </div>
 </template>
 
 <script>
+import Pagination from './Pagination.vue'
+
 export default {
   name: 'BeerList',
   props: ['beers', 'value'],
+  data () {
+    return {
+      searchTerms: '',
+      currentPage: 1
+    }
+  },
+  watch: {
+    searchTerms: function () {
+      this.currentPage = 0
+    }
+  },
   computed: {
     beersLoading () {
       return !this.beers.length && !this.searchTerms
@@ -41,7 +58,21 @@ export default {
             return 0
           }
         })
+    },
+    filteredBeersWithPagination () {
+      return (this.filteredBeers.slice(this.currentPage * 10, (this.currentPage * 10) + 10))
+    },
+    numberOfResult () {
+      return this.filteredBeers.length
     }
+  },
+  methods: {
+    changePage (page) {
+      this.currentPage = page
+    }
+  },
+  components: {
+    Pagination
   }
 }
 </script>
